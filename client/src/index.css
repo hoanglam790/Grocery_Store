@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+* {
+    font-family: "Playfair Display", serif;
+}
+
+.userTable {
+    @apply bg-white
+}
+
+.userTable th, .userTable td{
+    @apply border border-b text-base text-center font-medium p-2
+}
+
+.scrollbar-none::-webkit-scrollbar{
+    display: none;
+}
