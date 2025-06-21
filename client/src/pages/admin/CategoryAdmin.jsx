@@ -9,9 +9,11 @@ import ConnectApi from '../../common/ApiBackend'
 import { showAlert, showErrorAlert } from '../../utils/AlertUtils'
 import moment from 'moment'
 import Pagination from '../../components/Pagination'
+import Swal from 'sweetalert2'
 
 const CategoryAdmin = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [updateCategoryId, setUpdateCategoryId] = useState(null)
     const [categoryData, setCategoryData] = useState([])
     const [openUploadCate, setOpenUploadCate] = useState(false)
     const [page, setPage] = useState(1)
@@ -20,12 +22,53 @@ const CategoryAdmin = () => {
     const [search, setSearch] = useState('')
 
     // Handle change value in toggle
-    const handleChangeStatus = (e) => {
-        const newStatus = e.target.checked ? true : false
-        setCategoryData((prev) => ({
-            ...prev,
-            isDisplayed: newStatus
-        }))
+    const handleChangeStatus = async(categoryId, e) => {
+        e.preventDefault()
+        const newStatus = e.target.checked
+
+        const result = await Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Are you sure to change this status?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        })
+
+        if(result.isConfirmed){
+            setUpdateCategoryId(categoryId)
+            try {
+                const responseData = await Axios({
+                    ...ConnectApi.updateCategory,
+                    data: {
+                        id: categoryId,
+                        isDisplayed: newStatus
+                    }
+                })
+
+                // Check if update category is successful
+                showAlert(responseData, () => {
+                    setCategoryData((prev) =>
+                        prev.map((item) =>
+                            item._id === categoryId ? { ...item, isDisplayed: newStatus } : item // Update isDisplayed value based on category id
+                        )
+                    )
+                })
+            } catch (error) {
+                showErrorAlert(error)
+            } finally {
+                setUpdateCategoryId(null)
+            }
+        }
+        else {
+            setCategoryData((prev) =>
+                prev.map((item) =>
+                    item._id === categoryId ? { ...item, isDisplayed: !newStatus } : item // Update isDisplayed value based on category id
+                )
+            )
+        }
     }
 
     // Fetch categories
@@ -44,10 +87,11 @@ const CategoryAdmin = () => {
             // Check if fetch categories is successful
             showAlert(responseData, 
                 () => {},
-                (payload) => {
-                    setTotalPageCount(payload?.totalNumberPage) // Total number of page
-                    setCategoryData(payload?.data) // Set categories
-                }
+                (data) => {
+                    setTotalPageCount(data?.totalNumberPage) // Total number of page
+                    setCategoryData(data?.data) // Set categories
+                },
+                false // Do not show success message
             )
         } catch (error) {
             showErrorAlert(error)
@@ -118,12 +162,20 @@ const CategoryAdmin = () => {
                                                         </td>
                                                         <td>
                                                             <label className='inline-flex items-center cursor-pointer'>
-                                                                <input
-                                                                    type='checkbox'
-                                                                    className='sr-only peer'
-                                                                    checked={category.isDisplayed}
-                                                                    onChange={(e) => handleChangeStatus(category._id, e)}                                               
-                                                                />
+                                                                {updateCategoryId === category._id ? (
+                                                                    // Show loading spinner
+                                                                    <div className='w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin'></div>
+                                                                ) : (
+                                                                    <input
+                                                                        type='checkbox'
+                                                                        className='sr-only peer'
+                                                                        checked={category.isDisplayed}
+                                                                        disabled={updateCategoryId === category._id}
+                                                                        onChange={(e) => handleChangeStatus(category._id, e)}                                               
+                                                                    />
+                                                                )}
+
+                                                                {/* Show toggle button */}
                                                                 <div className='relative w-11 h-6 bg-gray-200 rounded-full dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600'></div>                                            
                                                             </label>
                                                         </td>

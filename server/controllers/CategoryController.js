@@ -119,7 +119,7 @@ export const getCategoryById = async(req,res) => {
 // Update category by id: PUT /api/category/update-category-by-id
 export const updateCategory = async(req,res) => {
     try {
-        const { id, name, image } = req.body
+        const { id, name, image, isDisplayed } = req.body
 
         // Check category id
         if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -133,7 +133,8 @@ export const updateCategory = async(req,res) => {
         // Update category by id
         const updateCategory = await CategoryModel.findByIdAndUpdate(id, {
             name,
-            image
+            image,
+            isDisplayed
         })
 
         // Send response
