@@ -10,6 +10,8 @@ import { showAlert, showErrorAlert } from '../../utils/AlertUtils'
 import moment from 'moment'
 import Pagination from '../../components/Pagination'
 import Swal from 'sweetalert2'
+import UpdateCategory from '../../components/admin/UpdateCategory'
+import ViewImage from '../../components/admin/ViewImage'
 
 const CategoryAdmin = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -20,6 +22,16 @@ const CategoryAdmin = () => {
     const [totalPageCount, setTotalPageCount] = useState(1)
     const [limit, setLimit] = useState(6)
     const [search, setSearch] = useState('')
+    const [viewFullImage, setViewFullImage] = useState('')
+    const [openUpdateCategory, setOpenUpdateCategory] = useState(false)
+    const [updateCategoryData, setUpdateCategoryData] = useState({
+        name: '',
+        image: ''
+    })
+
+    const [deleteCategoryData, setDeleteCategoryData] = useState({
+        _id: ''
+    })
 
     // Handle change value in toggle
     const handleChangeStatus = async(categoryId, e) => {
@@ -49,15 +61,17 @@ const CategoryAdmin = () => {
                 })
 
                 // Check if update category is successful
-                showAlert(responseData, () => {
-                    setCategoryData((prev) =>
-                        prev.map((item) =>
-                            item._id === categoryId ? { ...item, isDisplayed: newStatus } : item // Update isDisplayed value based on category id
+                await showAlert(responseData, {
+                    onSuccess: () => {
+                        setCategoryData((prev) =>
+                            prev.map((item) =>
+                                item._id === categoryId ? { ...item, isDisplayed: newStatus } : item // Update isDisplayed value based on category id
+                            )
                         )
-                    )
+                    }
                 })
             } catch (error) {
-                showErrorAlert(error)
+                await showErrorAlert(error)
             } finally {
                 setUpdateCategoryId(null)
             }
@@ -85,14 +99,13 @@ const CategoryAdmin = () => {
             })
 
             // Check if fetch categories is successful
-            showAlert(responseData, 
-                () => {},
-                (data) => {
-                    setTotalPageCount(data?.totalNumberPage) // Total number of page
-                    setCategoryData(data?.data) // Set categories
+            await showAlert(responseData, {
+                onSuccess: () => {
+                    setTotalPageCount(responseData?.data?.totalNumberPage)
+                    setCategoryData(responseData?.data?.data)
                 },
-                false // Do not show success message
-            )
+                showSuccess: false
+            })
         } catch (error) {
             showErrorAlert(error)
         } finally {
@@ -157,7 +170,8 @@ const CategoryAdmin = () => {
                                                             <img 
                                                                 alt={category.name}
                                                                 src={category.image}
-                                                                className='w-full h-10 mt-3 object-scale-down'
+                                                                onClick={() => setViewFullImage(category.image)}
+                                                                className='w-full h-10 my-1.5 object-scale-down cursor-pointer'
                                                             />
                                                         </td>
                                                         <td>
@@ -182,7 +196,10 @@ const CategoryAdmin = () => {
                                                         <td>{moment(category.createdAt).format('MM/DD/YYYY - HH:mm')}</td>
                                                         <td>
                                                             <div className='flex justify-center gap-2'>
-                                                                <button 
+                                                                <button onClick={() => {
+                                                                        setOpenUpdateCategory(true)
+                                                                        setUpdateCategoryData(category)
+                                                                    }}
                                                                     className='bg-blue-600 rounded p-1.5 hover:bg-blue-700 hover:text-white cursor-pointer'
                                                                     title='Edit'>
                                                                     <FaRegEdit size={20}/>
@@ -221,6 +238,18 @@ const CategoryAdmin = () => {
         {
             openUploadCate && (
                 <UploadCategory fetchCategoriesData={fetchCategoryData} back={() => setOpenUploadCate(false)}/>
+            )
+        }
+
+        {
+            openUpdateCategory && (
+                <UpdateCategory fetchCategoriesData={fetchCategoryData} data={updateCategoryData} close={() => setOpenUpdateCategory(false)}/>
+            )
+        }
+
+        {
+            viewFullImage && (
+                <ViewImage url={viewFullImage} close={() => setViewFullImage('')} />
             )
         }
         </section>    

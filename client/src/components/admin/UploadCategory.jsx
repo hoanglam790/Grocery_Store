@@ -62,12 +62,14 @@ const UploadCategory = ({ back, fetchCategoriesData }) => {
                 data: categoryData
             })
             
-            showAlert(responseData, () => {
-                back()
-                fetchCategoriesData()
+            await showAlert(responseData, {
+                onSuccess: () => {
+                    back()
+                    fetchCategoriesData()
+                }
             })
         } catch (error) {
-            showErrorAlert(error)
+            await showErrorAlert(error)
         } finally {
             setIsLoading(false)
         }

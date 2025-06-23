@@ -1,48 +1,53 @@
 import Swal from 'sweetalert2'
 
-export const showAlert = (
-    responseData, 
-    onSuccess = () => {}, 
-    onSetData = () => {}, 
-    showSuccess = true // Add a flag to show success message
+export const showAlert = async(
+    responseData,
+    {
+        onSuccess = () => {},
+        onFail = () => {},
+        onSetData = () => {},
+        showSuccess = true
+    } = {}
 ) => {
     const data = responseData?.data
 
+    // Check if fetch data is successful
     if(data?.success) {
-        if(showSuccess){
-            Swal.fire({
+        if(showSuccess) {
+            await Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: data?.message,
+                title: data?.message || 'Successful',
                 showConfirmButton: false,
                 timer: 3000,
                 customClass: {
                     title: 'text-xl font-semibold'
                 }
             })
-        }               
-        onSuccess() // Call the onSuccess callback  
-        onSetData(data)    
-    }
-    else {
-        Swal.fire({
+        }
+        onSuccess()
+        onSetData(data)
+    } else {
+        await Swal.fire({
             position: 'center',
             icon: 'error',
-            title: data?.message,
+            title: data?.message || 'Something went wrong!',
             showConfirmButton: false,
             timer: 3000,
             customClass: {
                 title: 'text-xl font-semibold'
             }
         })
+        onFail()
     }
 }
 
-export const showErrorAlert = (error) => {
-    Swal.fire({
+
+export const showErrorAlert = async(error) => {
+    await Swal.fire({
         position: 'center',
         icon: 'error',
-        title: error?.response?.data?.message,
+        title: error?.response?.data?.message || 'Unknown error',
         showConfirmButton: false,
         timer: 3000,
         customClass: {
