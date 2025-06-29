@@ -15,7 +15,7 @@ import ViewImage from '../../components/admin/ViewImage'
 
 const CategoryAdmin = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const [updateCategoryId, setUpdateCategoryId] = useState(null)
+    const [updateCategoryId, setUpdateCategoryId] = useState('')
     const [categoryData, setCategoryData] = useState([])
     const [openUploadCate, setOpenUploadCate] = useState(false)
     const [page, setPage] = useState(1)
@@ -29,13 +29,10 @@ const CategoryAdmin = () => {
         image: ''
     })
 
-    const [deleteCategoryData, setDeleteCategoryData] = useState({
-        _id: ''
-    })
+    const [deleteCategoryData, setDeleteCategoryData] = useState('')
 
     // Handle change value in toggle
     const handleChangeStatus = async(categoryId, e) => {
-        e.preventDefault()
         const newStatus = e.target.checked
 
         const result = await Swal.fire({
@@ -73,7 +70,7 @@ const CategoryAdmin = () => {
             } catch (error) {
                 await showErrorAlert(error)
             } finally {
-                setUpdateCategoryId(null)
+                setUpdateCategoryId('')
             }
         }
         else {
@@ -110,6 +107,44 @@ const CategoryAdmin = () => {
             showErrorAlert(error)
         } finally {
             setIsLoading(false)
+        }
+    }
+
+    // Handle delete category
+    const handleDeleteCategory = async(categoryId) => {
+        const result = await Swal.fire({
+            position: 'center',
+            icon: 'question',
+            title: 'Are you sure to delete this category?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        })
+
+        if(result.isConfirmed){
+            try {
+                setDeleteCategoryData(categoryId)
+                const responseData = await Axios({
+                    ...ConnectApi.deleteCategory,
+                    data: {
+                        id: categoryId
+                    }
+                })
+
+                // Check if delete category is successful
+                await showAlert(responseData, {
+                    onSuccess: () => {
+                        setCategoryData((prev) => prev.filter((item) => item._id !== categoryId)) // Removed currently category id and keep other categories
+                        fetchCategoryData()
+                    }
+                })
+            } catch (error) {
+                await showErrorAlert(error)
+            } finally {
+                setDeleteCategoryData('')
+            }
         }
     }
 
@@ -204,7 +239,9 @@ const CategoryAdmin = () => {
                                                                     title='Edit'>
                                                                     <FaRegEdit size={20}/>
                                                                 </button>
-                                                                <button 
+                                                                <button onClick={() => {
+                                                                        handleDeleteCategory(category._id)                                                                       
+                                                                    }}
                                                                     className='bg-red-500 rounded p-1.5 hover:bg-red-700 hover:text-white cursor-pointer'
                                                                     title='Delete'>
                                                                     <MdDelete size={20}/>
@@ -226,8 +263,7 @@ const CategoryAdmin = () => {
                                         totalPages={totalPageCount}
                                         onPageChange={setPage}
                                     />
-                                </div>
-                                
+                                </div>                               
                             </div>
                         )
                     }
