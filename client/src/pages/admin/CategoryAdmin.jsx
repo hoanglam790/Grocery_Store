@@ -51,8 +51,8 @@ const CategoryAdmin = () => {
             try {
                 const responseData = await Axios({
                     ...ConnectApi.updateCategory,
+                    url: `${ConnectApi.updateCategory.url}/${categoryId}`,
                     data: {
-                        id: categoryId,
                         isDisplayed: newStatus
                     }
                 })
@@ -128,9 +128,7 @@ const CategoryAdmin = () => {
                 setDeleteCategoryData(categoryId)
                 const responseData = await Axios({
                     ...ConnectApi.deleteCategory,
-                    data: {
-                        id: categoryId
-                    }
+                    url: `${ConnectApi.deleteCategory.url}/${categoryId}`
                 })
 
                 // Check if delete category is successful

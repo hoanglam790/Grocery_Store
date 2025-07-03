@@ -6,11 +6,11 @@ const router = express.Router()
 
 // For user
 router.post('/all-categories', getAllCategories)
-router.get('/get-category-by-id', getCategoryById)
+router.get('/get-category/:id', getCategoryById)
 
 // For admin
 router.post('/create', authUser, createCategory)
-router.put('/update-category-by-id', authUser, updateCategory)
-router.delete('/delete-category-by-id', authUser, deleteCategory)
+router.put('/update-category/:id', authUser, updateCategory)
+router.delete('/delete-category/:id', authUser, deleteCategory)
 
 export default router

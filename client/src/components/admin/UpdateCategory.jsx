@@ -68,11 +68,18 @@ const UpdateCategory = ({ close, fetchCategoriesData, data: cateData }) => {
         e.preventDefault()
         try {
             setIsLoading(true)
+
+            // Destructuring category data
+            const { id, ...updateCategory } = categoryData
+
+            // Update category
             const responseData = await Axios({
                 ...ConnectApi.updateCategory,
-                data: categoryData
+                url: `${ConnectApi.updateCategory.url}/${id}`,
+                data: updateCategory
             })
             
+            // Show notification if update category is successful
             await showAlert(responseData, {
                 onSuccess: () => {
                     close()

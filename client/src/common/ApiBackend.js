@@ -38,19 +38,19 @@ const connectApi = {
         method: 'POST'
     },
     getCategoryById: {
-        url: '/api/category/get-category-by-id',
-        method: 'POST'
+        url: '/api/category/get-category',
+        method: 'GET'
     },
     createCategory: {
         url: '/api/category/create',
         method: 'POST'
     },
     updateCategory: {
-        url: '/api/category/update-category-by-id',
+        url: '/api/category/update-category',
         method: 'PUT'
     },
     deleteCategory: {
-        url: '/api/category/delete-category-by-id',
+        url: '/api/category/delete-category',
         method: 'DELETE'
     },
 

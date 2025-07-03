@@ -14,6 +14,16 @@ export const createCategory = async(req,res) => {
             })
         }
 
+        // Check if category name exists
+        const categoryExists = await CategoryModel.findOne({ name })
+        if(categoryExists) {
+            return res.status(400).json({
+                success: false,
+                error: true, 
+                message: 'Category already exists'
+            })
+        }
+
         // Create new category
         const newCategory = await CategoryModel.create({ 
             name, 
@@ -83,10 +93,10 @@ export const getAllCategories = async(req,res) => {
     }
 }
 
-// Get category by id: GET /api/category/get-category-by-id
+// Get category by id: GET /api/category/get-category/:id
 export const getCategoryById = async(req,res) => {
     try {
-        const { id } = req.body
+        const { id } = req.params
 
         // Check category id
         if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -116,10 +126,11 @@ export const getCategoryById = async(req,res) => {
     }
 }
 
-// Update category by id: PUT /api/category/update-category-by-id
+// Update category by id: PUT /api/category/update-category/:id
 export const updateCategory = async(req,res) => {
     try {
-        const { id, name, image, isDisplayed } = req.body
+        const { id } = req.params
+        const { name, image, isDisplayed } = req.body
 
         // Check category id
         if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -156,7 +167,7 @@ export const updateCategory = async(req,res) => {
 // Delete category by id: DELETE /api/category/delete-category-by-id
 export const deleteCategory = async(req,res) => {
     try {
-        const { id } = req.body
+        const { id } = req.params
 
         // Check category id
         if(!mongoose.Types.ObjectId.isValid(id)) {
