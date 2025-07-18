@@ -62,7 +62,33 @@ const connectApi = {
     checkImage: {
         url: '/api/file/check-image',
         method: 'POST'
-    }
+    },
+
+    // API: Product
+    createProduct: {
+        url: '/api/product/create-product',
+        method: 'POST'
+    },
+    getAllProducts: {
+        url: '/api/product/all-products',
+        method: 'POST'
+    },
+    getProductById: {
+        url: '/api/product/get-product',
+        method: 'GET'
+    },
+    getProductByCategory: {
+        url: '/api/product/get-product-by-category',
+        method: 'GET'
+    },
+    updateProduct: {
+        url: '/api/product/update-product',
+        method: 'PUT'
+    },
+    deleteProduct: {
+        url: '/api/product/delete-product',
+        method: 'DELETE'
+    },
 }
 
 export default connectApi

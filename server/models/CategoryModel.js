@@ -1,6 +1,11 @@
 import mongoose from 'mongoose'
 
 const categorySchema = mongoose.Schema({
+    categoryId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     name: {
         type: String,
         required: [true, 'Please provide category name'],

@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
 import CategoryModel from '../models/CategoryModel.js'
+import ProductModel from '../models/ProductModel.js'
+import { generateCategoryId } from '../utils/GenerateId.js'
 
-// Create a new category: POST /api/category/create
+// Create a new category: POST - /api/category/create
 export const createCategory = async(req,res) => {
     try {
         const { name, image } = req.body
@@ -24,8 +26,11 @@ export const createCategory = async(req,res) => {
             })
         }
 
+        const categoryId = await generateCategoryId()
+
         // Create new category
-        const newCategory = await CategoryModel.create({ 
+        const newCategory = await CategoryModel.create({
+            categoryId, 
             name, 
             image 
         })
@@ -46,11 +51,13 @@ export const createCategory = async(req,res) => {
     }
 }
 
-// Get all categories: GET /api/category/all-categories
+// Get all categories: GET - /api/category/all-categories
 export const getAllCategories = async(req,res) => {
     try {
+        // Create a query to paginate the categories, count the total number of categories, and search for categories
         let { page, limit, search } = req.body
 
+        // Check if page and limit are provided
         if(!page) {
             page = 1
         }
@@ -59,15 +66,19 @@ export const getAllCategories = async(req,res) => {
             limit = 10
         }
 
+        // Check if search is provided
+        // Finding nearly categories based on category name
         const query = search ? {
             name: {
                 $regex: search,
-                $option: 'i'
+                $options: 'i' // Case-insensitive
             }
         } : {}
 
+        // Calculate the skip page
         const skipPage = (page - 1) * limit
 
+        // Get all categories
         const [data, totalPageCount] = await Promise.all([
             CategoryModel.find(query)
                 .sort({ createdAt: -1 })
@@ -76,6 +87,7 @@ export const getAllCategories = async(req,res) => {
             CategoryModel.countDocuments(query)
         ])
 
+        // Send response
         return res.status(200).json({
             success: true,
             error: false,
@@ -93,7 +105,7 @@ export const getAllCategories = async(req,res) => {
     }
 }
 
-// Get category by id: GET /api/category/get-category/:id
+// Get category by id: GET - /api/category/get-category/:id
 export const getCategoryById = async(req,res) => {
     try {
         const { id } = req.params
@@ -126,7 +138,7 @@ export const getCategoryById = async(req,res) => {
     }
 }
 
-// Update category by id: PUT /api/category/update-category/:id
+// Update category by id: PUT - /api/category/update-category/:id
 export const updateCategory = async(req,res) => {
     try {
         const { id } = req.params
@@ -164,7 +176,7 @@ export const updateCategory = async(req,res) => {
     }
 }
 
-// Delete category by id: DELETE /api/category/delete-category-by-id
+// Delete category by id: DELETE - /api/category/delete-category/:id
 export const deleteCategory = async(req,res) => {
     try {
         const { id } = req.params
@@ -178,8 +190,29 @@ export const deleteCategory = async(req,res) => {
             })
         }
 
+        // Check if category has products
+        const checkProduct = await ProductModel.countDocuments({ category: id })
+
+        // If category has products => cannot delete
+        if(checkProduct > 0) {
+            return res.status(400).json({
+                success: false,
+                error: true, 
+                message: 'Category has products, cannot delete'
+            })
+        }
+
         // Delete category by id
         const deleteCategory = await CategoryModel.findByIdAndDelete(id)
+
+        // If category not found
+        if(!deleteCategory) {
+            return res.status(404).json({
+                success: false,
+                error: true, 
+                message: 'Category not found'
+            })
+        }
 
         // Send response
         res.status(200).json({

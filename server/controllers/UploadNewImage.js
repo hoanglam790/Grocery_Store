@@ -6,7 +6,6 @@ export const uploadNewImage = async(req,res) => {
         const file = req.file
         console.log('file', file)
         const uploadImg = await uploadImageCloudinary(file)
-
         
         return res.status(200).json({
             success: true,

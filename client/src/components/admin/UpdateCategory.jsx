@@ -94,18 +94,20 @@ const UpdateCategory = ({ close, fetchCategoriesData, data: cateData }) => {
     }
     
     return (
-        <section className='fixed inset-0 bg-neutral-800/70 flex items-center justify-center'>
+        <section className='fixed inset-0 z-50 flex items-center justify-center bg-neutral-800/70'>
             <div className='bg-white max-w-4xl w-[600px] p-5 rounded-md'>
-                <div className='flex items-center justify-between'>
+                <div className='relative text-center'>
                     <h2 className='font-semibold uppercase'>Update Category</h2>
-                    <button onClick={close} className='w-fit block ml-auto cursor-pointer'>
+                    <button onClick={close} className='absolute top-0.5 right-0 -translate-y-1/2 my-2.5 cursor-pointer'>
                         <IoMdClose size={25} />
                     </button>
                 </div>
 
+                <hr className='my-4 border-gray-300 -mx-5'/>
+
                 <form onSubmit={handleSubmitUpdateCategory}>
-                    <div className='grid py-4'>
-                        <label className='py-2 font-semibold'>Name:</label>
+                    <div className='grid'>
+                        <label className='py-2 font-semibold'>Category Name:</label>
                         <input 
                             type='text'
                             id='name'

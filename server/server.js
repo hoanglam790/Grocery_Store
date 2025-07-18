@@ -7,6 +7,7 @@ import ConnectDatabase from './config/Database.js'
 import UserRoute from './routes/UserRoute.js'
 import CategoryRoute from './routes/CategoryRoute.js'
 import UploadImageRoute from './routes/UploadImageRoute.js'
+import ProductRoute from './routes/ProductRoute.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -40,6 +41,7 @@ app.use(session({
 app.use('/api/user', UserRoute)
 app.use('/api/category', CategoryRoute)
 app.use('/api/file', UploadImageRoute)
+app.use('/api/product', ProductRoute)
 
 // Test api
 app.get('/', (req, res) => {

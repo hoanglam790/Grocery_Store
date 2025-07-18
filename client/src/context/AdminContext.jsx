@@ -1,8 +1,8 @@
 import { createContext, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUserDetails } from '../redux/userSlice'
-import fetchUser from '../utils/fetchUser'
+import { setUserDetails } from '../redux/UserSlice'
+import fetchUser from '../utils/FetchUser'
 
 // Create context
 export const AdminContext = createContext() 

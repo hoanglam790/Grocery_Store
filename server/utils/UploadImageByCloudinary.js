@@ -12,19 +12,21 @@ const uploadImageCloudinary = async(image) => {
 
     // Use the file name as the unique identifier
     const uploadImage = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-        {
-            folder: 'Grocery_store',
-            public_id: fileName.split('.')[0],
-            resource_type: 'image' 
-        },
-        (error, result) => {
-            if(error) {
-                return reject(error)
-            } else {
-                return resolve(result)
-            }              
-        }).end(buffer)
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: 'Grocery_store',
+                public_id: fileName.split('.')[0],
+                resource_type: 'auto' // Auto-detect file type
+            },
+            (error, result) => {
+                if(error) {
+                    return reject(error)
+                } else {
+                    return resolve(result)
+                }              
+            }
+        )
+        stream.end(buffer)
     })
     return uploadImage
 }

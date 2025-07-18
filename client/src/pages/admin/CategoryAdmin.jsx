@@ -12,12 +12,13 @@ import Pagination from '../../components/Pagination'
 import Swal from 'sweetalert2'
 import UpdateCategory from '../../components/admin/UpdateCategory'
 import ViewImage from '../../components/admin/ViewImage'
+import { GrSearch } from 'react-icons/gr'
 
 const CategoryAdmin = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [updateCategoryId, setUpdateCategoryId] = useState('')
     const [categoryData, setCategoryData] = useState([])
-    const [openUploadCate, setOpenUploadCate] = useState(false)
+    const [openUploadCategory, setOpenUploadCategory] = useState(false)
     const [page, setPage] = useState(1)
     const [totalPageCount, setTotalPageCount] = useState(1)
     const [limit, setLimit] = useState(6)
@@ -146,6 +147,13 @@ const CategoryAdmin = () => {
         }
     }
 
+    // Handle search
+    const handleSearch = (e) => {
+        const { value } = e.target
+        setSearch(value) // Set search value
+        setPage(1) // Reset page when search change
+    }
+
     // Fetch categories data when page change or search change
     useEffect(() => {
         let flag = true 
@@ -155,7 +163,7 @@ const CategoryAdmin = () => {
                 fetchCategoryData()
                 flag = false
             }
-        }, 300)
+        }, 500)
 
         return () => {
             clearTimeout(interval)
@@ -166,11 +174,24 @@ const CategoryAdmin = () => {
     return (
         <section>
         {
-            !openUploadCate && (
+            !openUploadCategory && (
                 <>
                     <div className='bg-slate-100 shadow-lg flex items-center justify-between p-2 ml-1'>
                         <h2 className='font-semibold'>All Categories</h2>
-                        <button onClick={() => setOpenUploadCate(true)} className='text-base border border-green-500 hover:bg-green-600 px-2 py-1 rounded flex items-center gap-1 cursor-pointer'>
+                        <div className='min-w-[220px] lg:min-w-[330px] h-10 rounded-md border border-gray-400 overflow-hidden focus-within:border-orange-600'>
+                            <button className='flex items-center justify-between ml-auto w-full h-full p-2 text-neutral-500'>
+                                <input type='text'
+                                    //value={searchText.text}
+                                    //onChange={handleInputChange}
+                                    placeholder='Search by name...'
+                                    value={search}
+                                    onChange={handleSearch}
+                                    className='w-full h-full bg-transparent outline-none'
+                                />
+                                <GrSearch className='fill-gray-600'/>
+                            </button>                       
+                        </div>
+                        <button onClick={() => setOpenUploadCategory(true)} className='text-base border border-green-500 hover:bg-green-600 px-2 py-1 rounded flex items-center gap-1 cursor-pointer'>
                             <MdAdd size={20} />
                             Create
                         </button>
@@ -270,8 +291,8 @@ const CategoryAdmin = () => {
         }
             
         {
-            openUploadCate && (
-                <UploadCategory fetchCategoriesData={fetchCategoryData} back={() => setOpenUploadCate(false)}/>
+            openUploadCategory && (
+                <UploadCategory fetchCategoriesData={fetchCategoryData} close={() => setOpenUploadCategory(false)}/>
             )
         }
 

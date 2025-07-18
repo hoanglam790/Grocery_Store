@@ -5,8 +5,9 @@ import uploadNewImage from '../../utils/UploadNewImage'
 import Axios from '../../common/AxiosConfig'
 import ConnectApi from '../../common/ApiBackend'
 import { showAlert, showErrorAlert } from '../../utils/AlertUtils'
+import { IoMdClose } from 'react-icons/io'
 
-const UploadCategory = ({ back, fetchCategoriesData }) => {
+const UploadCategory = ({ close, fetchCategoriesData }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isImageLoading, setIsImageLoading] = useState(false)
     const [categoryData, setCategoryData] = useState({
@@ -64,7 +65,7 @@ const UploadCategory = ({ back, fetchCategoriesData }) => {
             
             await showAlert(responseData, {
                 onSuccess: () => {
-                    back()
+                    close()
                     fetchCategoriesData()
                 }
             })
@@ -76,18 +77,20 @@ const UploadCategory = ({ back, fetchCategoriesData }) => {
     }
 
     return (
-        <section>
-            <div className='bg-white flex items-center justify-between w-full mt-2'>
-                <button onClick={back} className='text-left ml-2 cursor-pointer'>
-                    <HiArrowNarrowLeft size={25} />
-                </button>
-                <h2 className='font-semibold text-center flex-1'>Create New Category</h2>
-            </div>
+        <section className='fixed inset-0 z-50 flex items-center justify-center bg-neutral-800/70'>
+            <div className='bg-white max-w-4xl w-[600px] p-5 rounded-md'>
+                <div className='relative text-center'>
+                    <h2 className='font-semibold uppercase'>Create New Category</h2>
+                    <button onClick={close} className='absolute top-0.5 right-0 -translate-y-1/2 my-2.5 cursor-pointer'>
+                        <IoMdClose size={25} />
+                    </button>
+                </div>
 
-            <div className='py-2 flex flex-col justify-between bg-white'>
-                <form onSubmit={handleSubmitCreateCategory} className='md:p-10 p-4 space-y-5 max-w-lg'>
-                    <div className='flex flex-col gap-1 max-w-md'>
-                        <label className='text-base font-medium' htmlFor='categoryName'>Category Name:</label>
+                <hr className='my-4 border-gray-300 -mx-5'/>
+
+                <form onSubmit={handleSubmitCreateCategory}>
+                    <div className='grid'>
+                        <label className='py-2 font-semibold text-base' htmlFor='categoryName'>Category Name:</label>
                         <input className='outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40' 
                             type='text' 
                             name='name' 
@@ -98,8 +101,8 @@ const UploadCategory = ({ back, fetchCategoriesData }) => {
                             required
                         />
                     </div>
-                    <div className='py-2 flex flex-col justify-between bg-white'>
-                        <p className='text-base font-medium'>Product Image:</p>
+                    <div className='flex flex-col justify-between bg-white'>
+                        <p className='py-2 font-semibold text-base'>Product Image:</p>
                         <div className='flex flex-col gap-4 lg:flex-row items-center'>
                             <div className='border border-blue-200 h-40 w-full lg:w-40 flex items-center justify-center rounded'>
                                 {
@@ -168,7 +171,7 @@ const UploadCategory = ({ back, fetchCategoriesData }) => {
                                 </button>
                             </div>
                         ) : (
-                            <div className='flex items-start'>
+                            <div className='flex items-center justify-center'>
                                 <button disabled={!changeColorValue} className={`${categoryData.name && categoryData.image ? 'w-[150px] flex items-center justify-center gap-4 mt-4 px-5 py-3.5 text-sm tracking-wide text-white bg-green-600 hover:bg-green-700 rounded-md focus:outline-none cursor-pointer'
                                     : 'w-[150px] flex items-center justify-center gap-4 px-5 py-3.5 mt-5 text-sm tracking-wide text-white bg-gray-700 rounded-md focus:outline-none cursor-not-allowed'}`}>
                                     Add

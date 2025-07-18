@@ -2,8 +2,8 @@ import { createContext, useEffect, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { products } from '../assets/assets'
-import { setUserDetails } from '../redux/userSlice'
-import fetchUser from '../utils/fetchUser'
+import { setUserDetails } from '../redux/UserSlice'
+import fetchUser from '../utils/FetchUser'
 
 // Create context
 export const AppContext = createContext() 
