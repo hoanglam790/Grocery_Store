@@ -18,11 +18,20 @@ export const AppContextProvider = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState({})
 
     // Get user details from local storage (Redux)
-    const user = useSelector((state) => state?.user_data)
+    const user = useSelector(state => state?.user_data)
 
     const fetchUserDetails = async() => {
-        const responseData = await fetchUser()
-        dispatch(setUserDetails(responseData.data))
+        try {
+            const responseData = await fetchUser()
+            console.log("📦 responseData:", responseData)
+            if(responseData.data) {
+                dispatch(setUserDetails(responseData.data))
+            } else {
+                console.warn("No user data received.")
+            }
+        } catch (error) {
+            console.error("Failed to fetch user", error)
+        }
     }
 
     const fetchProducts = async() => { 
@@ -34,7 +43,7 @@ export const AppContextProvider = ({ children }) => {
         fetchProducts()
     }, [])
 
-    const value = { navigate, dispatch, user, showUserLogin, setShowUserLogin, product, setProduct, fetchUserDetails, fetchProducts }
+    const value = { navigate, dispatch, user, setShowUserLogin, product, setProduct, fetchUserDetails, fetchProducts }
 
     return <AppContext.Provider value={value}>
         {children}

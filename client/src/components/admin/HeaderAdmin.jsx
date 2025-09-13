@@ -1,14 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { assets } from '../../assets/assets'
-import { useAdminContext } from '../../context/AdminContext'
+import { useAppContext } from '../../context/AppContext'
 import Swal from 'sweetalert2'
 import { showAlert, showErrorAlert } from '../../utils/AlertUtils'
 import Axios from '../../common/AxiosConfig'
 import ConnectApi from '../../common/ApiBackend'
 
 const HeaderAdmin = () => {
-    const { user, dispatch, navigate } = useAdminContext()
+    const { user, dispatch, navigate } = useAppContext()
 
     const handleLogout = async(e) => {
         e.preventDefault()

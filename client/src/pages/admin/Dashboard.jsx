@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import { AdminContextProvider } from '../../context/AdminContext'
+import { AppContextProvider } from '../../context/AppContext'
 import HeaderAdmin from '../../components/admin/HeaderAdmin'
 import SidebarAdmin from '../../components/admin/SidebarAdmin'
 import FooterAdmin from '../../components/admin/FooterAdmin'
@@ -8,7 +8,7 @@ import FooterAdmin from '../../components/admin/FooterAdmin'
 const Dashboard = () => {
     return (
         <>
-            <AdminContextProvider>
+            <AppContextProvider>
                 { /* Header */ }
                 <HeaderAdmin />
 
@@ -24,8 +24,8 @@ const Dashboard = () => {
                 </div>
 
                 {/* Footer */}
-                <FooterAdmin />          
-            </AdminContextProvider>
+                <FooterAdmin />
+            </AppContextProvider>            
         </>
     )
 }

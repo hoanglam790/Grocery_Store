@@ -9,6 +9,7 @@ import VerifyOTP from '../pages/user/VerifyOTP'
 import ResetPassword from '../pages/user/ResetPassword'
 import Dashboard from '../pages/admin/Dashboard'
 import CategoryAdmin from '../pages/admin/CategoryAdmin'
+import ProductAdmin from '../pages/admin/ProductAdmin'
 
 const router = createBrowserRouter([
     {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
             {
                 path: '/reset-password',
                 element: <ResetPassword />
-            }           
+            }         
         ],
     },
     {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
             {
                 path: 'categories',
                 element: <CategoryAdmin />
+            },
+            {
+                path: 'products',
+                element: <ProductAdmin />
             }
         ]
     }

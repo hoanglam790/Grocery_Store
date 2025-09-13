@@ -44,9 +44,9 @@ const SidebarAdmin = () => {
         { name: 'Dashboard', path: '/admin', icon: dashboardicon },
         { name: 'Account Information', path: '/admin/account', icon: accounticon },
         { name: 'Category', path: '/admin/categories', icon: categoryicon },
-        { name: 'Product', path: '/admin/product', icon: producticon},
+        { name: 'Product', path: '/admin/products', icon: producticon},
         { name: 'News', path: '/admin/news', icon: newsicon},
-        { name: 'Order', path: '/admin/order', icon: ordericon},
+        { name: 'Order', path: '/admin/orders', icon: ordericon},
         { name: 'Warehouse', path: '/admin/warehouse', icon: warehouseicon},
         { name: 'Statistics', path: '/admin/statistics', icon: statsicon}
     ]

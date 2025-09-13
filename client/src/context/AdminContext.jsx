@@ -2,7 +2,10 @@ import { createContext, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserDetails } from '../redux/UserSlice'
+import { setAllCategories } from '../redux/ProductSlice'
 import fetchUser from '../utils/FetchUser'
+import Axios from '../common/AxiosConfig'
+import ConnectApi from '../common/ApiBackend'
 
 // Create context
 export const AdminContext = createContext() 
@@ -20,11 +23,28 @@ export const AdminContextProvider = ({ children }) => {
         dispatch(setUserDetails(responseData.data))
     }
 
+    const fetchCategoryData = async() => {
+        try {
+            const responseData = await Axios({
+                ...ConnectApi.getAllCategories
+            })
+
+            // Check if fetch categories is successful
+            if(responseData?.data?.success) {
+                dispatch(setAllCategories(responseData?.data?.data))
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         fetchUserDetails()
+        fetchCategoryData()
     }, [])
 
-    const value = { navigate, dispatch, user, fetchUserDetails }
+    const value = { navigate, dispatch, user, fetchUserDetails, fetchCategoryData }
 
     return <AdminContext.Provider value={value}>
         {children}

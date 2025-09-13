@@ -18,14 +18,14 @@ export const userSlice = createSlice({
     initialState: initialUserState,
     reducers: {
         setUserDetails: (state, action) => { 
-            state._id = action.payload._id
-            state.name = action.payload.name
-            state.email = action.payload.email
-            state.password = action.payload.password
-            state.avatar = action.payload.avatar
-            state.refreshToken = action.payload.refreshToken
-            state.lastLogin = action.payload.lastLogin
-            state.role = action.payload.role
+            state._id = action.payload?._id
+            state.name = action.payload?.name
+            state.email = action.payload?.email
+            state.password = action.payload?.password
+            state.avatar = action.payload?.avatar
+            state.refreshToken = action.payload?.refreshToken
+            state.lastLogin = action.payload?.lastLogin
+            state.role = action.payload?.role
         },
         setLogout: (state) => { 
             state._id = ''

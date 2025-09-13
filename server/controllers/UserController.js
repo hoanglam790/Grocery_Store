@@ -97,7 +97,7 @@ export const loginUser = async(req,res) => {
             return res.status(400).json({
                 success: false,
                 error: true, 
-                message: 'Incorrect password, please check your password and try again' 
+                message: 'Incorrect password, please check your password and try it again'
             })
         }
 

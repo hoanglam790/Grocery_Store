@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { categories } from '../assets/assets'
 
 const initialProductState = {
-    category: [],
-    product: []
+    categories: [],
+    products: []
 }
 
 export const productSlice = createSlice({
@@ -10,10 +11,10 @@ export const productSlice = createSlice({
     initialState: initialProductState,
     reducers: {
         setAllCategories: (state, action) => {
-            state.category = action.payload
+            state.categories = action.payload
         },
         setAllProducts: (state, action) => {
-            state.product = [...action.payload]
+            state.products = [...action.payload]
         }
     }
 })

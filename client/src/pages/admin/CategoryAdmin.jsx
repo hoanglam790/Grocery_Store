@@ -163,8 +163,7 @@ const CategoryAdmin = () => {
                 fetchCategoryData()
                 flag = false
             }
-        }, 500)
-
+        }, 1000) // Delay 1s before fetch categories data
         return () => {
             clearTimeout(interval)
         }
@@ -191,7 +190,7 @@ const CategoryAdmin = () => {
                                 <GrSearch className='fill-gray-600'/>
                             </button>                       
                         </div>
-                        <button onClick={() => setOpenUploadCategory(true)} className='text-base border border-green-500 hover:bg-green-600 px-2 py-1 rounded flex items-center gap-1 cursor-pointer'>
+                        <button onClick={() => setOpenUploadCategory(true)} className='text-base border border-green-500 hover:bg-green-600 hover:text-white px-2 py-1 rounded flex items-center gap-1 cursor-pointer'>
                             <MdAdd size={20} />
                             Create
                         </button>
@@ -209,7 +208,7 @@ const CategoryAdmin = () => {
                                                 <th className='w-[300px]'>Category Name</th>
                                                 <th className='w-[230px]'>Image</th>
                                                 <th className=''>Display</th>
-                                                <th className=''>Created</th>
+                                                <th className=''>Created At</th>
                                                 <th className=''>Action</th>
                                             </tr>                        
                                         </thead>
@@ -261,7 +260,7 @@ const CategoryAdmin = () => {
                                                                 <button onClick={() => {
                                                                         handleDeleteCategory(category._id)                                                                       
                                                                     }}
-                                                                    className='bg-red-500 rounded p-1.5 hover:bg-red-700 hover:text-white cursor-pointer'
+                                                                    className='bg-red-600 rounded p-1.5 hover:bg-red-700 hover:text-white cursor-pointer'
                                                                     title='Delete'>
                                                                     <MdDelete size={20}/>
                                                                 </button>

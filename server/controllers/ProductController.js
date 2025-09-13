@@ -5,9 +5,9 @@ import CategoryModel from '../models/CategoryModel.js'
 // Create product: POST - /api/product/create-product
 export const createProduct = async(req,res) => {
     try {
-        const { name, image, description, price, discount, stock, categoryId } = req.body
+        const { name, image, description, price, discount, stock, category, categoryId } = req.body
 
-        if(!name || !image[0] || !description || !price || !discount || !stock || !categoryId) {
+        if(!name || !image[0] || !description || !price || !discount || !stock || !category || !categoryId) {
             return res.status(400).json({
                 success: false,
                 error: true, 
@@ -94,6 +94,7 @@ export const getAllProducts = async(req,res) => {
         // Get all products
         const [data, totalPageCount] = await Promise.all([
             ProductModel.find(query)
+                .populate('category')
                 .sort({ createdAt: -1 })
                 .skip(skipPage)
                 .limit(limit),
