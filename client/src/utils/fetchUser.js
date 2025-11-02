@@ -6,9 +6,10 @@ const fetchUser = async() => {
         const responseData = await Axios({
             ...ConnectApi.getUser
         })
-        return responseData.data
+        return responseData.data.data
     } catch (error) {
         console.log(error)
+        return null
     }
 }
 

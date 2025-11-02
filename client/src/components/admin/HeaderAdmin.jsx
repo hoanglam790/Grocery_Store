@@ -6,10 +6,12 @@ import Swal from 'sweetalert2'
 import { showAlert, showErrorAlert } from '../../utils/AlertUtils'
 import Axios from '../../common/AxiosConfig'
 import ConnectApi from '../../common/ApiBackend'
+import { setLogout } from '../../redux/UserSlice'
 
 const HeaderAdmin = () => {
     const { user, dispatch, navigate } = useAppContext()
 
+    // Handle logout
     const handleLogout = async(e) => {
         e.preventDefault()
         const result = await Swal.fire({
@@ -23,23 +25,23 @@ const HeaderAdmin = () => {
             cancelButtonText: 'No'
         })
 
+        // If admin click on 'yes'
         if(result.isConfirmed) {
             try {
                 const responseData = await Axios({
                     ...ConnectApi.logout
                 })
 
+                // Check if login is successful
                 await showAlert(responseData, {
                     onSuccess: () => {
                         dispatch(setLogout(null))
-                        localStorage.removeItem('token')
+                        localStorage.removeItem('token') // Remove token from local storage
                         navigate('/')
-                    },
-                    onFail: () => {
-                        console.warn('Logout failed.')
                     }
                 })
             } catch (error) {
+                console.log('Logout error: ', error)
                 await showErrorAlert(error)
             }
         }

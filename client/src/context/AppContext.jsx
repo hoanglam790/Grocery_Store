@@ -21,16 +21,9 @@ export const AppContextProvider = ({ children }) => {
     const user = useSelector(state => state?.user_data)
 
     const fetchUserDetails = async() => {
-        try {
-            const responseData = await fetchUser()
-            console.log("📦 responseData:", responseData)
-            if(responseData.data) {
-                dispatch(setUserDetails(responseData.data))
-            } else {
-                console.warn("No user data received.")
-            }
-        } catch (error) {
-            console.error("Failed to fetch user", error)
+        const responseData = await fetchUser()
+        if(responseData) {
+            dispatch(setUserDetails(responseData))
         }
     }
 

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { IoMailOpenOutline } from 'react-icons/io5'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import { HiArrowNarrowLeft } from 'react-icons/hi'
 import Axios from '../../common/AxiosConfig'
 import ConnectApi from '../../common/ApiBackend'
 import { toast } from 'react-hot-toast'
-import fetchUser from '../../utils/fetchUser'
-import { setUserDetails } from '../../redux/userSlice'
-import { useDispatch } from 'react-redux'
+import fetchUser from '../../utils/FetchUser'
+import { setUserDetails } from '../../redux/UserSlice'
 import { CgSpinner } from 'react-icons/cg'
+import { useAppContext } from '../../context/AppContext'
 
 const Login = () => {
     const [userData, setUserData] = useState({
@@ -18,8 +18,7 @@ const Login = () => {
     })
     const [isLoading, setIsLoading] = useState(false)
 
-    const navigate = useNavigate() // Navigate
-    const dispatch = useDispatch() // Dispatch
+    const { navigate, dispatch } = useAppContext()
 
     // Handle change
     const handleChange = (e) => {
@@ -69,7 +68,8 @@ const Login = () => {
 
                 // Update user details
                 const updateUser = await fetchUser()
-                dispatch(setUserDetails(updateUser.data))
+                dispatch(setUserDetails(updateUser))
+                //console.log('updateUser:', updateUser)
 
                 // Reset user data
                 setUserData({
@@ -78,7 +78,7 @@ const Login = () => {
                 })
 
                 // Check user role and redirect
-                if(updateUser.data.role === 'admin') {
+                if(updateUser.role === 'admin') {
                     navigate('/admin')
                 } else {
                     navigate('/')

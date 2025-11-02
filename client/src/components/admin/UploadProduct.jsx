@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
-import { CgSpinner } from 'react-icons/cg'
 import uploadNewImage from '../../utils/UploadNewImage'
 import Axios from '../../common/AxiosConfig'
 import ConnectApi from '../../common/ApiBackend'
@@ -78,6 +77,7 @@ const UploadProduct = ({ close, fetchProductsData }) => {
         })
     }
 
+    // Handle select category
     const handleSelectCategory = (e) => {
         const { value } = e.target
         const category = allCategories.find(e => e._id === value)
@@ -101,6 +101,7 @@ const UploadProduct = ({ close, fetchProductsData }) => {
         setSelectCategory('')
     }
 
+    // Handle submit to create product
     const handleSubmitCreateProduct = async(e) => {
         e.preventDefault()
         try {
@@ -121,7 +122,6 @@ const UploadProduct = ({ close, fetchProductsData }) => {
             setLoading(false)
         }
     }
-
     return (
         <section className='fixed inset-0 z-50 flex items-center justify-center bg-neutral-800/70'>
             <div className='bg-white max-w-4xl w-full p-5 rounded-md'>

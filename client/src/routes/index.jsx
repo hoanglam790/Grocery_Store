@@ -10,54 +10,77 @@ import ResetPassword from '../pages/user/ResetPassword'
 import Dashboard from '../pages/admin/Dashboard'
 import CategoryAdmin from '../pages/admin/CategoryAdmin'
 import ProductAdmin from '../pages/admin/ProductAdmin'
+import { ProtectedRoute } from './ProtectedRoute'
+import { PublicRoute } from './PublicRoute'
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
         children: [
+            // Public Routes
             {
-                path: '/',
-                element: <Home />
-            },           
-            {
-                path: '/products',
-                element: <AllProducts />
+                element: <PublicRoute />,
+                children: [
+                    {
+                        path: 'login',
+                        element: <Login />
+                    },
+                    {
+                        path: 'register',
+                        element: <Register />
+                    }
+                ]
             },
+
+            // User Routes
             {
-                path: '/login',
-                element: <Login />
-            },
-            {
-                path: '/register',
-                element: <Register />
-            },
-            {
-                path: '/forget-password',
-                element: <ForgetPassword />
-            },
-            {
-                path: '/verify-otp',
-                element: <VerifyOTP />
-            },
-            {
-                path: '/reset-password',
-                element: <ResetPassword />
-            }         
-        ],
+                element: <ProtectedRoute blockAdmin={true} />,
+                children: [
+                    {
+                        path: '',
+                        element: <Home />
+                    },
+                    {
+                        path: 'products',
+                        element: <AllProducts />
+                    },
+                    {
+                        path: 'forget-password',
+                        element: <ForgetPassword />
+                    },
+                    {
+                        path: 'verify-otp',
+                        element: <VerifyOTP />
+                    },
+                    {
+                        path: 'reset-password',
+                        element: <ResetPassword />
+                    }
+                ]
+            },                   
+        ]
     },
+
+    // Admin Routes
     {
         path: 'admin',
-        element: <Dashboard />,
+        element: <ProtectedRoute role='admin' />,
         children: [
             {
-                path: 'categories',
-                element: <CategoryAdmin />
-            },
-            {
-                path: 'products',
-                element: <ProductAdmin />
-            }
+                path: '',
+                element: <Dashboard />,
+                children: [
+                    {
+                        path: 'categories',
+                        element: <CategoryAdmin />
+                    },
+                    {
+                        path: 'products',
+                        element: <ProductAdmin />
+                    }
+                ]
+            }         
         ]
     }
 ])

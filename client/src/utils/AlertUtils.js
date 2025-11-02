@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2'
 
+// Show alert message
 export const showAlert = async(
     responseData,
     {
@@ -9,7 +10,10 @@ export const showAlert = async(
         showSuccess = true
     } = {}
 ) => {
-    const data = responseData?.data
+    // Get data
+    // If responseData.data exists => Use responseData.data
+    // Otherwise use responseData directly
+    const data = responseData?.data ?? responseData
 
     // Check if fetch data is successful
     if(data?.success) {
@@ -42,12 +46,22 @@ export const showAlert = async(
     }
 }
 
-
+// Show error alert
 export const showErrorAlert = async(error) => {
+    let message = 'Unknown error'
+
+    if(error?.response?.data?.message) {
+        message = error.response.data.message
+    } else if(error?.message) {
+        message = error.message
+    } else if(typeof error === 'string') {
+        message = error
+    }
+
     await Swal.fire({
         position: 'center',
         icon: 'error',
-        title: error?.response?.data?.message || 'Unknown error',
+        title: message,
         showConfirmButton: false,
         timer: 3000,
         customClass: {
